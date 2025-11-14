@@ -85,10 +85,11 @@ def generateDistribution(diameters: list[float], weights: list[float]):
 
     ax.axvline(mean, color='red', linestyle='--', linewidth=2, label=f'Mean: {mean:.2f}')
     ax.axvline(median, color='green', linestyle='--', linewidth=2, label=f'Median: {median:.2f}')
-    ax.axvline(mean + std, color='orange', linestyle=':', linewidth=2, label=f'+1 SD: {mean + std:.2f}')
     ax.axvline(mean - std, color='orange', linestyle=':', linewidth=2, label=f'-1 SD: {mean - std:.2f}')
+    ax.axvline(mean + std, color='orange', linestyle=':', linewidth=2, label=f'+1 SD: {mean + std:.2f}')
     ax.axvline(mean + 2*std, color='purple', linestyle=':', linewidth=2, label=f'+2 SD: {mean + 2*std:.2f}')
-    ax.axvline(mean - 2*std, color='purple', linestyle=':', linewidth=2, label=f'-2 SD: {mean - 2*std:.2f}')
+    ax.axvline(mean + 3*std, color='brown', linestyle=':', linewidth=2, label=f'+3 SD: {mean + 3*std:.2f}')
+    ax.axvline(mean + 4*std, color='pink', linestyle=':', linewidth=2, label=f'+4 SD: {mean + 4*std:.2f}')
 
     def weighted_percentile(data, weights, percentile):
         sorted_indices = np.argsort(data)
@@ -101,13 +102,14 @@ def generateDistribution(diameters: list[float], weights: list[float]):
     percentiles = [25, 50, 75, 90, 95]
     percentile_values = [weighted_percentile(diameters_array, weights_array, p) for p in percentiles]
 
-    stats_text = f'n = {len(diameters)}\n'
+    stats_text = f'Total parts analyzed: {len(diameters)}\n\n'
     stats_text += f'Mean = {mean:.2f}\n'
     stats_text += f'SD = {std:.2f}\n'
     stats_text += f'Median = {median:.2f}\n'
     stats_text += f'Min = {min(diameters):.2f}\n'
     stats_text += f'Max = {max(diameters):.2f}\n\n'
-    stats_text += 'Percentiles (weighted):\n'
+    weight_label = 'weighted' if DO_WEIGHTING else 'unweighted'
+    stats_text += f'Percentiles ({weight_label}):\n'
     for p, v in zip(percentiles, percentile_values):
         stats_text += f'{p}th: {v:.2f}\n'
 
